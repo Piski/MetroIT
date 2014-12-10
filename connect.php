@@ -17,7 +17,7 @@
     
 
     $url = 'https://opendata.metropolia.fi/r1/reservation/search -d';
-	$apiKey='plETuc0IEnakfjZIf8n0:';
+	$apiKey='api_key:';
 	$query= "{
 	        \"rangeStart\":\"$year-$month-$date\T$hours:$minutes\",
 	        \"rangeEnd\":\"$year-$month-$date\T21:00\",
