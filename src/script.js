@@ -5,19 +5,19 @@ $(document).ready(function() {
 	 *	ETYB302, ETYB303, ETYB311A, ETYB311B
 	*/
 
-	var classroom = ["ETYB114", "ETYB116", "ETYB202", "ETYB203", "ETYB204", "ETYB205", "ETYB302", "ETYB303", "ETYB311"];
+	var classroom = ["ETYB114", "ETYB116", "ETYB202", "ETYB203", "ETYB204", "ETYA2123", "ETYB302", "ETYB303", "ETYB311"];
 
 	$("body").swipe( {
         swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-	        //reservationStatus(classroom[0]);
-			//reservationStatus(classroom[1]);
-			//reservationStatus(classroom[2]);
-			//reservationStatus(classroom[3]);
-			//reservationStatus(classroom[4]);
-			//reservationStatus(classroom[5]);
-			//reservationStatus(classroom[6]);
+	        reservationStatus(classroom[0]);
+			reservationStatus(classroom[1]);
+			reservationStatus(classroom[2]);
+			reservationStatus(classroom[3]);
+			reservationStatus(classroom[4]);
+			reservationStatus(classroom[5]);
+			reservationStatus(classroom[6]);
 			reservationStatus(classroom[7]);
-			//reservationStatus(classroom[8]); 
+			reservationStatus(classroom[8]);
         },
          threshold:100
       });
@@ -31,10 +31,7 @@ function reservationStatus(classroom) {
 	var hours = time.getHours();
 	var minutes = time.getMinutes();
     
-    // test here
-	var hours = 17
-	var minutes = 46
-
+    var room; // new
 	var startHours = [];
 	var endHours = [];
 	var startMinutes = [];
@@ -56,7 +53,7 @@ function reservationStatus(classroom) {
 			var obj = v.resources;
 			for (var key in obj) {
 			  	if (obj.hasOwnProperty(key)) {
-			    	var room = obj[key].code;
+			    	room = obj[key].code; // new (without var)
 			    	if(isReserved(room, classroom)) {
 			    		console.log(v.startDate + " " + v.endDate);
 			    		startHours.push(splitStartHours(v.startDate));
@@ -119,21 +116,26 @@ function isFree(startHours, startMinutes, endHours, endMinutes, hours, minutes) 
 
 function untilReserved(startHours, startMinutes, hours, minutes) {
 	for(var i = 0; i < startHours.length; i++) {
-		freeHours =  startHours[i] - hours;
-		freeMinutes =  60 - (minutes - startMinutes[i]);
+		freeHours =  startHours[0] - hours;
+		freeMinutes =  60 - (minutes - startMinutes[0]);
 		if(freeMinutes > 0) {
 			freeHours -= 1;
-			if (freeMinutes == 60) {
-				freeMinutes = 0;
+			if (freeMinutes > 60) {
+				freeMinutes = startMinutes[0] - minutes;
 				freeHours += 1;
 			}
 		}
+        if(freeMinutes == 60) {
+            freeMinutes = 0;
+            freeHours += 1;
+        }
 	}
 }
 
 function untilFree(endHours, endMinutes, hours, minutes, i) {
+    // i taitaapi uudistuksen jälkeen aina olla 0 niin vähän turha
 	freeHours =  endHours[i] - hours;
-	freeMinutes =  60 - (minutes - endMinutes[i]); // alkaa olla kauhea clusterfuck
+	freeMinutes =  60 - (minutes - endMinutes[i]);
     if(freeMinutes > 0) {
         freeHours -= 1;
         if (freeMinutes > 60) {
