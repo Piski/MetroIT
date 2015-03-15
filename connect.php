@@ -8,13 +8,6 @@
       $minutes = $_GET["minutes"];
     }
 
-/*
-    $year = 2014;
-    $month = 12;
-    $date = 3;
-    $hours = 08;
-    $minutes = 00;*/
-    
 
     $url = 'https://opendata.metropolia.fi/r1/reservation/search -d';
 	$apiKey='api_key:';

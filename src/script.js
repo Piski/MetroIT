@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    
 	/*
 	 *	https://wiki.metropolia.fi/display/tietohallinto/Vanha+maantie+6
 	 *	ETYB114, ETYB116, ETYB202, ETYB203, ETYB204, ETYB205
@@ -53,7 +54,7 @@ function reservationStatus(classroom) {
 			var obj = v.resources;
 			for (var key in obj) {
 			  	if (obj.hasOwnProperty(key)) {
-			    	room = obj[key].code; // new (without var)
+			    	room = obj[key].code;
 			    	if(isReserved(room, classroom)) {
 			    		console.log(v.startDate + " " + v.endDate);
 			    		startHours.push(splitStartHours(v.startDate));
@@ -96,12 +97,12 @@ function splitEndMinutes(endTime) {
 	var tmp = endTime[14] + endTime[15];
 	return tmp;
 }
-// jos minuutit mene yli 45 se laskee että luokka on vapaa. Tarvitaan lisäehto tai lisäys edellisiin
+
 function isFree(startHours, startMinutes, endHours, endMinutes, hours, minutes) {
 	var free = true;
-	for(var i = 0; i < startHours.length; i++) { // nyt 11.46.. tunti päätty nyt 12.45. onko luokka vapaa vai varattu? EHKÄ KORJATTU. NYT NÄYTTÄÄÄ 1h -1min
-		if(startHours[i] <= hours && endHours[i] >= hours) { // jos klo nyt on enemmän kun varauksen alkamiskohta && varauksen loppuminen on myöhemmin kuin klo nyt. Esim. 10 <= 11 && 11 >= 11
-			if(startMinutes[i] <= minutes && (endMinutes[i] >= minutes || endHours[i] > hours)) { // jos minuutit nyt ovat enemmän kuin varauksen alkamis minuutit && loppumisminuutit ovat enemmän kuin minuutit nyt.
+	for(var i = 0; i < startHours.length; i++) {
+		if(startHours[i] <= hours && endHours[i] >= hours) {
+			if(startMinutes[i] <= minutes && (endMinutes[i] >= minutes || endHours[i] > hours)) {
 				// jos täällä niin tarkoittaa että luokka on varattu
                 untilFree(endHours, endMinutes, hours, minutes, i);
 				free = false;
@@ -133,7 +134,6 @@ function untilReserved(startHours, startMinutes, hours, minutes) {
 }
 
 function untilFree(endHours, endMinutes, hours, minutes, i) {
-    // i taitaapi uudistuksen jälkeen aina olla 0 niin vähän turha
 	freeHours =  endHours[i] - hours;
 	freeMinutes =  60 - (minutes - endMinutes[i]);
     if(freeMinutes > 0) {
